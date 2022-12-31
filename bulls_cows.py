@@ -34,9 +34,10 @@ def candidates(alphabet, cell_count):
         return crossn(alphabet, alphabet, cell_count - 1)
 
 def print_top(scores, top):
+    print()
     print(f"{len(scores)} candidates left")
     for (w,s) in scores[0:top]:
-        print(f"{w}: {s}")
+        print(f"Top guess: {w}")
 
 def next_guess(squares):
     while True:
