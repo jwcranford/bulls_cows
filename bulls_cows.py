@@ -34,9 +34,18 @@ def candidates(alphabet, cell_count):
     else:
         return crossn(alphabet, alphabet, cell_count - 1)
 
-def print_top(scores, top):
+def pretty_print_solution_size(size):
+    lines = size // 80;
+    left = size % 80;
+    for x in range(0,lines):
+        print('.' * 80)
+    print('.' * left)
+
+def print_top(scores, top, verbose):
     print()
     print(f"{len(scores)} candidates left")
+    if verbose:
+        pretty_print_solution_size(len(scores)) 
     for (w,s) in scores[0:top]:
         print(f"Top guess: {w}")
 
@@ -86,6 +95,8 @@ with the least number of unique characters / colors score the highest.''')
     parser.add_argument('-T', '--take',
         help='automatically take the top candidate and use it',
         default=True, action=argparse.BooleanOptionalAction)
+    parser.add_argument('-v', '--verbose', default=True,
+                            action=argparse.BooleanOptionalAction)
 
     args = parser.parse_args()
 
@@ -96,6 +107,6 @@ with the least number of unique characters / colors score the highest.''')
     scores.sort(key=lambda s: s[1])
 
     while True:
-        print_top(scores, args.top)
+        print_top(scores, args.top, args.verbose)
         (guess, bulls, cows) = next_guess(args.squares, scores, args.take)
         scores = [(c, s) for (c,s) in scores if bulls_cows(c, guess) == (bulls, cows)]
