@@ -112,5 +112,9 @@ with the least number of unique characters / colors score the highest.''')
     while True:
         print_top(scores, args.top, args.verbose,
                       len(args.alphabet) ** args.squares)
-        (guess, bulls, cows) = next_guess(args.squares, scores, args.take)
+        (guess, bulls, cows) = next_guess(args.squares,
+                                              scores,
+                                              args.take)
+        if bulls == args.squares:
+            break
         scores = [(c, s) for (c,s) in scores if bulls_cows(c, guess) == (bulls, cows)]
