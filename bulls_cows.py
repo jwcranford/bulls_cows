@@ -5,9 +5,10 @@
 # Usage: Run with -h to see built-in help
 # bulls_cows.py -h
 #
-# Prompts for guesses and results during the game and restricts the solution space 
-# accordingly, printing out the top-scoring remaining solutions. Solutions
-# with the least number of unique characters / colors score the highest.
+# Prompts for guesses and results during the game and restricts the
+# solution space accordingly, printing out the top-scoring remaining
+# solutions. Solutions with the least number of unique characters /
+# colors score the highest.
 
 
 import argparse
@@ -25,8 +26,8 @@ def crossn(alphabet, words, cell_count):
 # candidates() is a generator that yields all possible solutions for
 # the given alphabet and the number of cells
 # 
-# alphabet is a set that contains all the possible values for a single cell
-# cell_count is the number of cells in the problem
+# alphabet is a set that contains all the possible values for a single
+# cell cell_count is the number of cells in the problem
 def candidates(alphabet, cell_count):
     if cell_count == 0:
         return []
@@ -39,17 +40,22 @@ def print_top(scores, top):
     for (w,s) in scores[0:top]:
         print(f"Top guess: {w}")
 
-def next_guess(squares):
+def next_guess(squares, scores, take_top):
     while True:
-        print(f'Enter next guess and results. Guess must be {squares} characters long.')
-        g = input('Guess: ')
+        if take_top:
+            g = scores[0][0]
+            print(f'Taking {g} as the guess. Enter results.')
+        else:
+            print(f'Enter next guess and results. Guess must be {squares} characters long.')
+            g = input('Guess: ')
         b = input('Bulls: ')
         c = input('Cows: ')
         if squares == len(g) and b.isdigit() and c.isdigit():
             break
     return (g, int(b), int(c))
 
-# returns the number of bulls and cows for the given guess, compared to the answer
+# returns the number of bulls and cows for the given guess, compared
+# to the answer  
 def bulls_cows(answer, guess):
     bulls = [g for (a,g) in zip(answer, guess) if a == g]
     nonbull_guesses = [g for (a,g) in zip(answer, guess) if a != g]
@@ -76,7 +82,10 @@ with the least number of unique characters / colors score the highest.''')
         help='number of squares in each guess', default=3, type=int)
     parser.add_argument('-t', '--top', 
         help='number of top scoring candidates to print',
-        default=1, type=int)
+        default=0, type=int)
+    parser.add_argument('-T', '--take',
+        help='automatically take the top candidate and use it',
+        default=True, action=argparse.BooleanOptionalAction)
 
     args = parser.parse_args()
 
@@ -88,5 +97,5 @@ with the least number of unique characters / colors score the highest.''')
 
     while True:
         print_top(scores, args.top)
-        (guess, bulls, cows)= next_guess(args.squares)
+        (guess, bulls, cows) = next_guess(args.squares, scores, args.take)
         scores = [(c, s) for (c,s) in scores if bulls_cows(c, guess) == (bulls, cows)]
