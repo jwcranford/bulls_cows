@@ -34,15 +34,19 @@ def candidates(alphabet, cell_count):
     else:
         return crossn(alphabet, alphabet, cell_count - 1)
 
-def pretty_print_solution_size(pct):
-    left = int(pct * 80)
-    print('.' * left)
+def pretty_print_solution_size(scores, total):
+    pct = scores / total
+    if pct > 0.01:
+        left = int(pct * 80)
+        print('#' * left)
+    else:
+        print('.' * scores)
 
 def print_top(scores, top, verbose, total):
     print()
     print(f"{len(scores)} / {total} candidates left")
     if verbose:
-        pretty_print_solution_size(len(scores) / total)
+        pretty_print_solution_size(len(scores), total)
     for (w,s) in scores[0:top]:
         print(f"Top guess: {w}")
 
