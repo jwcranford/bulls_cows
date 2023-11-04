@@ -87,13 +87,15 @@ with the least number of unique characters / colors score the highest.''')
     parser.add_argument('squares', 
         help='number of squares in each guess', default=3, type=int)
     parser.add_argument('-t', '--top', 
-        help='number of top scoring candidates to print',
+        help='number of top scoring candidates to print (default is 0)',
         default=0, type=int)
     parser.add_argument('-T', '--take',
-        help='automatically take the top candidate and use it',
+        help='automatically take the top candidate and use it (defaults to true)',
         default=True, action=argparse.BooleanOptionalAction)
-    parser.add_argument('-v', '--verbose', default=True,
-                            action=argparse.BooleanOptionalAction)
+    parser.add_argument('-v', '--verbose',
+        help='prints graphic indicator of progress (defaults to true)',
+        default=True,
+        action=argparse.BooleanOptionalAction)
 
     args = parser.parse_args()
 
